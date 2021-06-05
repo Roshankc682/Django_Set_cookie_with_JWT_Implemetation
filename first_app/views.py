@@ -99,35 +99,11 @@ def logout(request):
 def user_new_access_and_refrsh_token_and(request):
     try:
         if request.COOKIES.get('refresh'):
-            token = request.COOKIES.get('refresh')
-            splitted_token = token.split(".")
-            second_base64_string = splitted_token[1]
-            second_base64_string_bytes = second_base64_string.encode('ascii')
-            jwt_bytes = base64.b64decode(second_base64_string_bytes + b'=' * (-len(second_base64_string_bytes) % 4))
-            jwt_decoded = jwt_bytes.decode('ascii')
-            jwt_decoded = json.loads(jwt_decoded)
-            exp = jwt_decoded["exp"]
-            import time
-            time_expired_check = exp - time.time()
-            if time_expired_check <= 0:
-                return Response({"message": "Refresh token Expired"}, status=status.HTTP_400_BAD_REQUEST)
-            else:
-                pass
-            if jwt_decoded["token_type"] != "refresh":
-                return Response({"message": "Not valid refresh token"}, status=status.HTTP_400_BAD_REQUEST)
-            else:
-                pass
-            if jwt_decoded["user_id"] == request.user.id:
-                pass
-            else:
-                return Response({"message": "Something went wrong in space"}, status=status.HTTP_400_BAD_REQUEST)
-            user = Users.objects.get(id=request.user.id)
-            refresh = Obtain_Refresh_And_Access.get_token(user)
-            response = Response({"access": str(refresh.access_token)}, status=status.HTTP_200_OK)
-            response.set_cookie('refresh', refresh, samesite="none", secure=True, httponly=True)
+            response = Response({"message": "Good !!!"}, status=status.HTTP_200_OK)
             return response
         else:
-            return Response({"message": "Refresh token not provided"}, status=status.HTTP_400_BAD_REQUEST)
+            response = Response({"message": "Refresh token missing !! "}, status=status.HTTP_400_BAD_REQUEST)
+            return response
     except:
-        return Response({"message": "Something went wrong in space"}, status=status.HTTP_400_BAD_REQUEST)
-    return Response({"message": "Something went wrong in space"}, status=status.HTTP_400_BAD_REQUEST)
+        response = Response({"message": "Something went wrong !! "}, status=status.HTTP_400_BAD_REQUEST)
+        return response
