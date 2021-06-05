@@ -33,8 +33,8 @@ class TokenViewBase(generics.GenericAPIView):
         # return Response({"message": request.build_absolute_uri()}, status=status.HTTP_400_BAD_REQUEST)
         try:
             if request.build_absolute_uri() == "http://api-v1-backend.herokuapp.com/api/access/refresh/" \
-                or \
-                request.build_absolute_uri() == "http://localhost:8000/api/access/refresh/":
+                    or \
+                    request.build_absolute_uri() == "http://localhost:8000/api/access/refresh/":
                 pass
             else:
                 if request.build_absolute_uri() == "http://api-v1-backend.herokuapp.com/api/token/" \
@@ -58,7 +58,8 @@ class TokenViewBase(generics.GenericAPIView):
                                 #     return Response({"message": "Invalid capcha"}, status=status.HTTP_400_BAD_REQUEST)
                                 # ===========================================
                             except:
-                                response = Response({"message": "recapcha not provided !!! "},status=status.HTTP_400_BAD_REQUEST)
+                                response = Response({"message": "recapcha not provided !!! "},
+                                                    status=status.HTTP_400_BAD_REQUEST)
                                 return response
                         else:
                             response = Response({"message": "Url not provided !!!"}, status=status.HTTP_400_BAD_REQUEST)
@@ -74,7 +75,7 @@ class TokenViewBase(generics.GenericAPIView):
             return response
         try:
             if request.COOKIES:
-                    request.COOKIES.clear()
+                request.COOKIES.clear()
             else:
                 pass
         except:

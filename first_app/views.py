@@ -8,7 +8,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.parsers import JSONParser
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from .serializers import UserSerializer , MyTokenObtainPairSerializer
+from .serializers import UserSerializer, MyTokenObtainPairSerializer
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import (TokenObtainPairView)
@@ -16,7 +16,6 @@ from .models import *
 from distutils.command.config import config
 from decouple import *
 from .serializers import UserSerializer, MyTokenObtainPairSerializer, Obtain_Refresh_And_Access
-
 
 
 # Register class
@@ -72,17 +71,20 @@ class RegisterView(GenericAPIView):
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 # login class
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_data_of_user(request):
     try:
-        return Response({"message":"welcome to dashboard"}, status=status.HTTP_200_OK)
+        return Response({"message": "welcome to dashboard"}, status=status.HTTP_200_OK)
     except:
         return Response({"message": "credentials not provided !!"}, status=status.HTTP_400_BAD_REQUEST)
+
 
 @csrf_exempt
 def logout(request):
@@ -93,6 +95,7 @@ def logout(request):
     else:
         content = {'message': 'Request not allowed'}
         return Response(content)
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
