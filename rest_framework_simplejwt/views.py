@@ -46,8 +46,7 @@ class TokenViewBase(generics.GenericAPIView):
                         x = requests.post(url)
                         response_dict = json.loads(x.text)
                         if response_dict["success"] == True:
-                            response = Response(x.text, status=status.HTTP_200_OK)
-                            return response
+                           pass
                         else:
                             return Response({"message": "Invalid capcha"}, status=status.HTTP_400_BAD_REQUEST)
                         # ===========================================
