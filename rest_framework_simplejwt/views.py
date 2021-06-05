@@ -29,7 +29,8 @@ class TokenViewBase(generics.GenericAPIView):
     # =========================================================================
     def post(self, request, *args, **kwargs):
         try:
-            if request.build_absolute_uri() == "http://localhost:8000/api/token/":
+            # if request.build_absolute_uri() == "http://localhost:8000/api/token/":
+            if request.build_absolute_uri() == "https://api-v1-backend.herokuapp.com/api/token/":
                 json_data = request.body
                 stream = io.BytesIO(json_data)
                 user_data_dic = JSONParser().parse(stream)
