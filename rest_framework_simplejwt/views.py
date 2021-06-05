@@ -29,12 +29,12 @@ class TokenViewBase(generics.GenericAPIView):
 
     # =========================================================================
     def post(self, request, *args, **kwargs):
-        # if request.build_absolute_uri() == "https://api-v1-backend.herokuapp.com/api/token/":
-        #     response = Response({"message": "Url was there"}, status=status.HTTP_200_OK)
-        #     return response
-        # else:
-        #     response = Response({"message": "Url not provided"}, status=status.HTTP_200_OK)
-        #     return response
+        if request.build_absolute_uri() == "https://api-v1-backend.herokuapp.com/api/token/":
+            response = Response({"message": "Url was there"}, status=status.HTTP_200_OK)
+            return response
+        else:
+            response = Response({"message": "Url not provided"}, status=status.HTTP_200_OK)
+            return response
         try:
             if request.COOKIES:
                     request.COOKIES.clear()
