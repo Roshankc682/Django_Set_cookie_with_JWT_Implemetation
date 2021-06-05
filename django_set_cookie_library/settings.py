@@ -16,7 +16,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 from distutils.command.config import config
 from decouple import *
-SECRET_KEY = config('SECRET_KEY')
+# SECRET_KEY = config('SECRET_KEY')
+
+SECRET_KEY = "django-insecure-ze26jpexemnehccu)s3qdwhi9j*l-q*o_i9%41d0qkwh$@w2(8"
 
 
 # Quick-start development settings - unsuitable for production
@@ -25,7 +27,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: keep the secret key used in production secret!
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["localhost","127.0.0.1","https://api-v1-backend.herokuapp.com","https://api-v1-backend.herokuapp.com/"]
 
