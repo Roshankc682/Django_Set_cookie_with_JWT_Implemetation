@@ -42,15 +42,14 @@ class TokenViewBase(generics.GenericAPIView):
                                 if len(user_data_dic["recapcha"]) == 0:
                                     return Response({"message": "Recapcha invalid"}, status=status.HTTP_400_BAD_REQUEST)
                                 # Here you capcha secret key from google capacha in .env file
-
                                 secret = config('secret')
                                 url = f"https://www.google.com/recaptcha/api/siteverify?secret={secret}&response={user_data_dic['recapcha']}"
                                 x = requests.post(url)
                                 response_dict = json.loads(x.text)
-                                # if response_dict["success"] == True:
-                                #     pass
-                                # else:
-                                #     return Response({"message": "Invalid capcha"}, status=status.HTTP_400_BAD_REQUEST)
+                                if response_dict["success"] == True:
+                                    pass
+                                else:
+                                    return Response({"message": "Invalid capcha"}, status=status.HTTP_400_BAD_REQUEST)
                             else:
                                 response = Response({"message": "Url required !!! "}, status=status.HTTP_200_OK)
                                 return response

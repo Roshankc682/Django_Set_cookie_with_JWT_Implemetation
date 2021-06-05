@@ -29,3 +29,12 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['user'] = user.username
         return token
 # =============================================================================
+
+class Obtain_Refresh_And_Access(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        # token['iat'] = datetime.datetime.now()
+        token['email'] = user.email
+        token['user'] = user.username
+        return token
