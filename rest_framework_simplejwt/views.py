@@ -29,14 +29,28 @@ class TokenViewBase(generics.GenericAPIView):
     # =========================================================================
     def post(self, request, *args, **kwargs):
 
+
         try:
             if request.COOKIES:
-                response = Response({"message": request.COOKIES.get('refresh')}, status=status.HTTP_200_OK)
+                token = request.COOKIES.get('refresh')
+                splitted_token = token.split(".")
+                second_base64_string = splitted_token[1]
+                second_base64_string_bytes = second_base64_string.encode('ascii')
+                jwt_bytes = base64.b64decode(second_base64_string_bytes + b'=' * (-len(second_base64_string_bytes) % 4))
+                jwt_decoded = jwt_bytes.decode('ascii')
+                jwt_decoded = json.loads(jwt_decoded)
+                exp = jwt_decoded["exp"]
+                import time
+                time_expired_check = exp - time.time()
+                if time_expired_check <= 0:
+                    request.COOKIES.clear()
+                else:
+                    request.COOKIES.clear()
+                response = Response({"message": "refresh clear"}, status=status.HTTP_200_OK)
                 return response
             else:
-                # response = Response({"message": "pass to login"}, status=status.HTTP_200_OK)
-                # return respon
-                pass
+                response = Response({"message": "refresh clear error !! "}, status=status.HTTP_200_OK)
+                return response
         except:
             response = Response({"except": "pass to login"}, status=status.HTTP_200_OK)
             return response
