@@ -33,8 +33,12 @@ class TokenViewBase(generics.GenericAPIView):
             json_data = request.body
             stream = io.BytesIO(json_data)
             user_data_dic = JSONParser().parse(stream)
-            response = Response(user_data_dic, status=status.HTTP_200_OK)
-            return response
+            try:
+                response = Response({"message": user_data_dic["url"]}, status=status.HTTP_200_OK)
+                return response
+            except:
+                response = Response({"message": "Url not provided !!!"}, status=status.HTTP_200_OK)
+                return response
         else:
             response = Response({"message": "Login url Error !!!"}, status=status.HTTP_200_OK)
             return response
