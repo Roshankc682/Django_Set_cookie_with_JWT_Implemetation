@@ -30,10 +30,11 @@ class TokenViewBase(generics.GenericAPIView):
     # =========================================================================
     def post(self, request, *args, **kwargs):
         if request.build_absolute_uri() == "http://api-v1-backend.herokuapp.com/api/token/":
-            response = Response({"message": "Url was there"}, status=status.HTTP_200_OK)
-            return response
+            pass
+            # response = Response({"message": "Url was there"}, status=status.HTTP_200_OK)
+            # return response
         else:
-            response = Response({"message": request.build_absolute_uri()}, status=status.HTTP_200_OK)
+            response = Response({"message": "Login url Error !!!"}, status=status.HTTP_200_OK)
             return response
         try:
             if request.COOKIES:
