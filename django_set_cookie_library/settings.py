@@ -27,7 +27,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost","127.0.0.1"]
+ALLOWED_HOSTS = ["localhost","127.0.0.1","https://api-v1-backend.herokuapp.com","https://api-v1-backend.herokuapp.com/"]
 
 # Application definition
 
@@ -142,7 +142,8 @@ CORS_ALLOW_CREDENTIALS = True;
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:8000",
-    "http://localhost"
+    "http://localhost",
+    "https://api-v1-backend.herokuapp.com"
 ]
 
 from datetime import timedelta
