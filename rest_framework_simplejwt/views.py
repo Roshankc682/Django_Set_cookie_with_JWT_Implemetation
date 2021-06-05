@@ -29,13 +29,20 @@ class TokenViewBase(generics.GenericAPIView):
 
     # =========================================================================
     def post(self, request, *args, **kwargs):
-        if request.build_absolute_uri() == "http://api-v1-backend.herokuapp.com/api/token/":
+        # production and devlopment url
+        if request.build_absolute_uri() == "http://api-v1-backend.herokuapp.com/api/token/" \
+                or \
+                request.build_absolute_uri() == "http://localhost:8000/api/token/":
             json_data = request.body
             stream = io.BytesIO(json_data)
             user_data_dic = JSONParser().parse(stream)
             try:
-                response = Response({"message": user_data_dic["url"]}, status=status.HTTP_200_OK)
-                return response
+                if request.build_absolute_uri() == user_data_dic["url"]:
+                    response = Response({"message": user_data_dic["url"]}, status=status.HTTP_200_OK)
+                    return response
+                else:
+                    response = Response({"message": "Url not provided !!!"}, status=status.HTTP_200_OK)
+                    return response
             except:
                 response = Response({"message": "Url not provided !!!"}, status=status.HTTP_200_OK)
                 return response
