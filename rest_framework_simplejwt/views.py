@@ -76,8 +76,8 @@ class TokenViewBase(generics.GenericAPIView):
             return response
         try:
             if request.COOKIES:
-                response = Response({"token_from_cookie": request.COOKIES.get('refresh')}, status=status.HTTP_400_BAD_REQUEST)
-                return response
+                # response = Response({"token_from_cookie": request.COOKIES.get('refresh')}, status=status.HTTP_400_BAD_REQUEST)
+                # return response
                 token = request.COOKIES.get('refresh')
                 splitted_token = token.split(".")
                 second_base64_string = splitted_token[1]
@@ -88,7 +88,6 @@ class TokenViewBase(generics.GenericAPIView):
                 exp = jwt_decoded["exp"]
                 import time
                 time_expired_check = exp - time.time()
-
                 if time_expired_check <= 0:
                     request.COOKIES.clear()
                 else:
