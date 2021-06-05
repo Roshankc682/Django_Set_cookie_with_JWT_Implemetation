@@ -97,7 +97,7 @@ def logout(request):
         return Response(content)
 
 
-# @api_view(['GET'])
+@api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def user_new_access_and_refrsh_token_and(request):
     try:
