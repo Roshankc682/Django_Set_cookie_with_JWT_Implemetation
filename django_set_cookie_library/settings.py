@@ -11,15 +11,16 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 from distutils.command.config import config
 from decouple import *
+
 # SECRET_KEY = config('SECRET_KEY')
 
 SECRET_KEY = "django-insecure-ze26jpexemnehccu)s3qdwhi9j*l-q*o_i9%41d0qkwh$@w2(8"
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -29,7 +30,7 @@ SECRET_KEY = "django-insecure-ze26jpexemnehccu)s3qdwhi9j*l-q*o_i9%41d0qkwh$@w2(8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["localhost","127.0.0.1","api-v1-backend.herokuapp.com"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "api-v1-backend.herokuapp.com"]
 
 # Application definition
 
@@ -48,6 +49,9 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend'
     ],
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
@@ -88,7 +92,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'django_set_cookie_library.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
@@ -117,7 +120,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -131,7 +133,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
@@ -139,14 +140,14 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR,'static')
+    os.path.join(BASE_DIR, 'static')
 ]
 # This one sucks coz u have to do some kind of wierd thing using command
-STATIC_ROOT = os.path.join(BASE_DIR,'assets')
+STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
 
 # On the other hand this will provide to input file and get using get request
 # http://localhost:8000/image/profile.png
-MEDIA_ROOT = os.path.join(BASE_DIR,'image')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'image')
 MEDIA_URL = '/image/'
 
 # Default primary key field type
@@ -173,7 +174,7 @@ SIMPLE_JWT = {
     'UPDATE_LAST_LOGIN': False,
 
     'ALGORITHM': 'HS256',
-    'SIGNING_KEY':SECRET_KEY,
+    'SIGNING_KEY': SECRET_KEY,
     'VERIFYING_KEY': None,
     'AUDIENCE': None,
     'ISSUER': None,
@@ -181,7 +182,6 @@ SIMPLE_JWT = {
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
     'USER_ID_FIELD': 'id',
     'USER_ID_CLAIM': 'user_id',
-
 
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
     'TOKEN_TYPE_CLAIM': 'token_type',
