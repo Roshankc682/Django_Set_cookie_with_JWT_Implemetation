@@ -91,7 +91,7 @@ class TokenViewBase(generics.GenericAPIView):
                 if time_expired_check <= 0:
                     request.COOKIES.clear()
                 else:
-                    request.COOKIES.clear()
+                   pass
             else:
                 pass
         except:
