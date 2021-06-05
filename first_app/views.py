@@ -6,18 +6,19 @@ from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.generics import GenericAPIView
 from rest_framework.parsers import JSONParser
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
-from .serializers import UserSerializer, MyTokenObtainPairSerializer
 from rest_framework import status
-from rest_framework.response import Response
 from rest_framework_simplejwt.views import (TokenObtainPairView)
 from .models import *
 from distutils.command.config import config
 from decouple import *
 from .serializers import UserSerializer, MyTokenObtainPairSerializer, Obtain_Refresh_And_Access
+# -----------------------------------------------------
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 
+# ----------------------------------------------------------
 # Register class
 class RegisterView(GenericAPIView):
     def post(self, request, *args, **kwargs):
@@ -77,15 +78,6 @@ class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def get_data_of_user(request):
-    try:
-        return Response({"message": "welcome to dashboard"}, status=status.HTTP_200_OK)
-    except:
-        return Response({"message": "credentials not provided !!"}, status=status.HTTP_400_BAD_REQUEST)
-
-
 @csrf_exempt
 def logout(request):
     if request.method == 'GET':
@@ -97,41 +89,50 @@ def logout(request):
         return Response(content)
 
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def user_new_access_and_refrsh_token_and(request):
-    try:
-        if request.COOKIES.get('refresh'):
-            token = request.COOKIES.get('refresh')
-            splitted_token = token.split(".")
-            second_base64_string = splitted_token[1]
-            second_base64_string_bytes = second_base64_string.encode('ascii')
-            jwt_bytes = base64.b64decode(second_base64_string_bytes + b'=' * (-len(second_base64_string_bytes) % 4))
-            jwt_decoded = jwt_bytes.decode('ascii')
-            jwt_decoded = json.loads(jwt_decoded)
-            exp = jwt_decoded["exp"]
-            import time
-            time_expired_check = exp - time.time()
-            if time_expired_check <= 0:
-                return Response({"message": "Refresh token Expired"}, status=status.HTTP_400_BAD_REQUEST)
+class get_data_of_user(APIView):
+    permission_classes = (IsAuthenticated,)
+    def get(self,request):
+        try:
+            return Response({"message": "welcome to dashboard"}, status=status.HTTP_200_OK)
+        except:
+            return Response({"message": "credentials not provided !!"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class user_new_access_and_refrsh_token_and(APIView):
+    permission_classes = (IsAuthenticated,)
+    def get(self,request):
+        try:
+            if request.COOKIES.get('refresh'):
+                token = request.COOKIES.get('refresh')
+                splitted_token = token.split(".")
+                second_base64_string = splitted_token[1]
+                second_base64_string_bytes = second_base64_string.encode('ascii')
+                jwt_bytes = base64.b64decode(second_base64_string_bytes + b'=' * (-len(second_base64_string_bytes) % 4))
+                jwt_decoded = jwt_bytes.decode('ascii')
+                jwt_decoded = json.loads(jwt_decoded)
+                exp = jwt_decoded["exp"]
+                import time
+                time_expired_check = exp - time.time()
+                if time_expired_check <= 0:
+                    return Response({"message": "Refresh token Expired"}, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    pass
+                if jwt_decoded["token_type"] != "refresh":
+                    return Response({"message": "Not valid refresh token"}, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    pass
+                if jwt_decoded["user_id"] == request.user.id:
+                    pass
+                else:
+                    return Response({"message": "Something went wrong in space"}, status=status.HTTP_400_BAD_REQUEST)
+                user = Users.objects.get(id=request.user.id)
+                refresh = Obtain_Refresh_And_Access.get_token(user)
+                response = Response({"access": str(refresh.access_token)}, status=status.HTTP_200_OK)
+                response.set_cookie('refresh', refresh, samesite="none", secure=True, httponly=True)
+                return response
             else:
-                pass
-            if jwt_decoded["token_type"] != "refresh":
-                return Response({"message": "Not valid refresh token"}, status=status.HTTP_400_BAD_REQUEST)
-            else:
-                pass
-            if jwt_decoded["user_id"] == request.user.id:
-                pass
-            else:
-                return Response({"message": "Something went wrong in space"}, status=status.HTTP_400_BAD_REQUEST)
-            user = Users.objects.get(id=request.user.id)
-            refresh = Obtain_Refresh_And_Access.get_token(user)
-            response = Response({"access": str(refresh.access_token)}, status=status.HTTP_200_OK)
-            response.set_cookie('refresh', refresh, samesite="none", secure=True, httponly=True)
+                response = Response({"message": "Refresh token missing !! "}, status=status.HTTP_400_BAD_REQUEST)
+                return response
+        except:
+            response = Response({"message": "Something went wrong !! "}, status=status.HTTP_400_BAD_REQUEST)
             return response
-        else:
-            response = Response({"message": "Refresh token missing !! "}, status=status.HTTP_400_BAD_REQUEST)
-            return response
-    except:
-        response = Response({"message": "Something went wrong !! "}, status=status.HTTP_400_BAD_REQUEST)
-        return response
