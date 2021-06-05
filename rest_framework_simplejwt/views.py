@@ -49,8 +49,9 @@ class TokenViewBase(generics.GenericAPIView):
                 response = Response({"message": "refresh clear"}, status=status.HTTP_200_OK)
                 return response
             else:
-                response = Response({"message": "refresh clear error !! "}, status=status.HTTP_200_OK)
-                return response
+                # response = Response({"message": "refresh clear error !! "}, status=status.HTTP_200_OK)
+                # return response
+                pass
         except:
             response = Response({"except": "pass to login"}, status=status.HTTP_200_OK)
             return response
