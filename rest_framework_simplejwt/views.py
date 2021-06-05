@@ -84,9 +84,11 @@ class TokenViewBase(generics.GenericAPIView):
                 else:
                     request.COOKIES.clear()
             else:
-                pass
+                response = Response({"message": "there is cookie "}, status=status.HTTP_200_OK)
+                return response
         except:
-            pass
+            response = Response({"message": "there is not cookie "}, status=status.HTTP_200_OK)
+            return response
         if request.COOKIES.get('refresh'):
             serializer = self.get_serializer(data={"refresh": request.COOKIES.get('refresh')})
         else:
