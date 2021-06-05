@@ -1,1 +1,1 @@
-web: waitress-serve --port=$PORT backend.wsgi:application
+web: waitress-serve --port=$PORT django_set_cookie_library.wsgi:application
