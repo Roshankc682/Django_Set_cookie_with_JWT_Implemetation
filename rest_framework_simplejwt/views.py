@@ -45,9 +45,9 @@ class TokenViewBase(generics.GenericAPIView):
                 if time_expired_check <= 0:
                     request.COOKIES.clear()
                 else:
-                    request.COOKIES.clear()
-                response = Response({"message": "refresh clear"}, status=status.HTTP_200_OK)
-                return response
+                    pass
+                # response = Response({"message": "refresh clear"}, status=status.HTTP_200_OK)
+                # return response
             else:
                 # response = Response({"message": "refresh clear error !! "}, status=status.HTTP_200_OK)
                 # return response
