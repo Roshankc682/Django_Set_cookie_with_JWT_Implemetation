@@ -45,13 +45,11 @@ class TokenViewBase(generics.GenericAPIView):
                         url = f"https://www.google.com/recaptcha/api/siteverify?secret={secret}&response={user_data_dic['recapcha']}"
                         x = requests.post(url)
                         response_dict = json.loads(x.text)
-                        if response_dict["success"] == True:
-                           pass
-                        else:
-                            return Response({"message": "Invalid capcha"}, status=status.HTTP_400_BAD_REQUEST)
+                        # if response_dict["success"] == True:
+                        #    pass
+                        # else:
+                        #     return Response({"message": "Invalid capcha"}, status=status.HTTP_400_BAD_REQUEST)
                         # ===========================================
-                        # response = Response({"message": "There is recapcha"}, status=status.HTTP_200_OK)
-                        # return response
                     except:
                         response = Response({"message": "recapcha not provided !!! "},status=status.HTTP_400_BAD_REQUEST)
                         return response
