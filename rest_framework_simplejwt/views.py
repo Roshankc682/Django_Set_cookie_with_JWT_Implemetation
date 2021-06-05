@@ -29,8 +29,6 @@ class TokenViewBase(generics.GenericAPIView):
 
     # =========================================================================
     def post(self, request, *args, **kwargs):
-        # production and devlopment url
-        # return Response({"message": request.build_absolute_uri()}, status=status.HTTP_400_BAD_REQUEST)
         try:
             if request.build_absolute_uri() == "http://api-v1-backend.herokuapp.com/api/access/refresh/" \
                     or \
