@@ -91,7 +91,15 @@ class TokenViewBase(generics.GenericAPIView):
                 if time_expired_check <= 0:
                     request.COOKIES.clear()
                 else:
-                   pass
+                   try:
+                       # if some tries to login giving refresh in cookie this will solve
+                       if user_data_dic["email"] and user_data_dic["password"]:
+                           request.COOKIES.clear()
+                       else:
+                           response = Response({"message": "Illigel thing !!!! "}, status=status.HTTP_200_OK)
+                           return response
+                   except:
+                       pass
             else:
                 pass
         except:
