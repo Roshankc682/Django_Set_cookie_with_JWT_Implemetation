@@ -1,6 +1,5 @@
 from django.urls import path
 from . import views
-from .views import *
 from rest_framework_simplejwt.views import (TokenObtainPairView,TokenRefreshView)
 
 # make a env file and import all requirements

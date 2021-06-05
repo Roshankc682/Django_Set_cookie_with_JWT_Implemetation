@@ -29,40 +29,47 @@ class TokenViewBase(generics.GenericAPIView):
 
     # =========================================================================
     def post(self, request, *args, **kwargs):
-        # production and devlopment url
-        if request.build_absolute_uri() == "http://api-v1-backend.herokuapp.com/api/token/" \
-                or \
-                request.build_absolute_uri() == "http://localhost:8000/api/token/":
-            json_data = request.body
-            stream = io.BytesIO(json_data)
-            user_data_dic = JSONParser().parse(stream)
-            try:
-                if request.build_absolute_uri() == user_data_dic["url"]:
+        try:
+            if request.build_absolute_uri() == "http://api-v1-backend.herokuapp.com/api/access/refresh/" \
+                    or \
+                    request.build_absolute_uri() == "http://localhost:8000/api/access/refresh/":
+                pass
+            else:
+                if request.build_absolute_uri() == "http://api-v1-backend.herokuapp.com/api/token/" \
+                        or \
+                        request.build_absolute_uri() == "http://localhost:8000/api/token/":
+                    json_data = request.body
+                    stream = io.BytesIO(json_data)
+                    user_data_dic = JSONParser().parse(stream)
                     try:
-                        user_data_dic["recapcha"]
-                        # ===========================================
-                        secret = "6LdjEeQaAAAAAAFIGHyO4CzqEcsBrVKI0DeWFtwg"
-                        url = f"https://www.google.com/recaptcha/api/siteverify?secret={secret}&response={user_data_dic['recapcha']}"
-                        x = requests.post(url)
-                        response_dict = json.loads(x.text)
-                        # if response_dict["success"] == True:
-                        #     pass
-                        # else:
-                        #     return Response({"message": "Invalid capcha"}, status=status.HTTP_400_BAD_REQUEST)
-                        # ===========================================
-                        response = Response({"message": "recapcha  provided !!! "}, status=status.HTTP_200_OK)
+                        if request.build_absolute_uri() == user_data_dic["url"]:
+                            try:
+                                user_data_dic["recapcha"]
+                                # ===========================================
+                                secret = "6LdjEeQaAAAAAAFIGHyO4CzqEcsBrVKI0DeWFtwg"
+                                url = f"https://www.google.com/recaptcha/api/siteverify?secret={secret}&response={user_data_dic['recapcha']}"
+                                x = requests.post(url)
+                                response_dict = json.loads(x.text)
+                                # if response_dict["success"] == True:
+                                #    pass
+                                # else:
+                                #     return Response({"message": "Invalid capcha"}, status=status.HTTP_400_BAD_REQUEST)
+                                # ===========================================
+                            except:
+                                response = Response({"message": "recapcha not provided !!! "},
+                                                    status=status.HTTP_400_BAD_REQUEST)
+                                return response
+                        else:
+                            response = Response({"message": "Url not provided !!!"}, status=status.HTTP_400_BAD_REQUEST)
+                            return response
                     except:
-                        response = Response({"message": "recapcha not provided !!! "},
-                                            status=status.HTTP_400_BAD_REQUEST)
+                        response = Response({"message": "Url not provided !!!"}, status=status.HTTP_400_BAD_REQUEST)
                         return response
                 else:
-                    response = Response({"message": "Url not provided !!!"}, status=status.HTTP_400_BAD_REQUEST)
+                    response = Response({"message": "Login url error !!!"}, status=status.HTTP_400_BAD_REQUEST)
                     return response
-            except:
-                response = Response({"message": "Url not provided !!!"}, status=status.HTTP_400_BAD_REQUEST)
-                return response
-        else:
-            response = Response({"message": "Login url Error !!!"}, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            response = Response({"message": "Something went wrong !!! "}, status=status.HTTP_400_BAD_REQUEST)
             return response
         try:
             if request.COOKIES:
