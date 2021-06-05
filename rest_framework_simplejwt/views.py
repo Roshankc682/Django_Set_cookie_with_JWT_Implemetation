@@ -53,7 +53,7 @@ class TokenViewBase(generics.GenericAPIView):
                 # return response
                 pass
         except:
-            response = Response({"except": "pass to login"}, status=status.HTTP_200_OK)
+            response = Response({"message": "Login Error !!!"}, status=status.HTTP_200_OK)
             return response
         if request.COOKIES.get('refresh'):
             serializer = self.get_serializer(data={"refresh": request.COOKIES.get('refresh')})
