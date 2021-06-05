@@ -33,7 +33,7 @@ class TokenViewBase(generics.GenericAPIView):
             response = Response({"message": "Url was there"}, status=status.HTTP_200_OK)
             return response
         else:
-            response = Response({"message": "Url not provided"}, status=status.HTTP_200_OK)
+            response = Response({"message": request.build_absolute_uri()}, status=status.HTTP_200_OK)
             return response
         try:
             if request.COOKIES:
