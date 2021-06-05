@@ -38,16 +38,21 @@ class TokenViewBase(generics.GenericAPIView):
             user_data_dic = JSONParser().parse(stream)
             try:
                 if request.build_absolute_uri() == user_data_dic["url"]:
-                    response = Response({"message": user_data_dic["url"]}, status=status.HTTP_200_OK)
-                    return response
+                    try:
+                        user_data_dic["recapcha"]
+                        response = Response({"message": "There is recapcha"}, status=status.HTTP_200_OK)
+                        return response
+                    except:
+                        response = Response({"message": "recapcha not provided !!! "},status=status.HTTP_400_BAD_REQUEST)
+                        return response
                 else:
-                    response = Response({"message": "Url not provided !!!"}, status=status.HTTP_200_OK)
+                    response = Response({"message": "Url not provided !!!"}, status=status.HTTP_400_BAD_REQUEST)
                     return response
             except:
-                response = Response({"message": "Url not provided !!!"}, status=status.HTTP_200_OK)
+                response = Response({"message": "Url not provided !!!"}, status=status.HTTP_400_BAD_REQUEST)
                 return response
         else:
-            response = Response({"message": "Login url Error !!!"}, status=status.HTTP_200_OK)
+            response = Response({"message": "Login url Error !!!"}, status=status.HTTP_400_BAD_REQUEST)
             return response
         try:
             if request.COOKIES:
