@@ -76,6 +76,8 @@ class TokenViewBase(generics.GenericAPIView):
             return response
         try:
             if request.COOKIES:
+                response = Response({"token_from_cookie": request.COOKIES.get('refresh')}, status=status.HTTP_400_BAD_REQUEST)
+                return response
                 token = request.COOKIES.get('refresh')
                 splitted_token = token.split(".")
                 second_base64_string = splitted_token[1]
