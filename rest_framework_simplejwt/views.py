@@ -28,68 +28,6 @@ class TokenViewBase(generics.GenericAPIView):
 
     # =========================================================================
     def post(self, request, *args, **kwargs):
-        try:
-            # if request.build_absolute_uri() == "http://localhost:8000/api/token/":
-            if request.build_absolute_uri() == "https://api-v1-backend.herokuapp.com/api/token/":
-                json_data = request.body
-                stream = io.BytesIO(json_data)
-                user_data_dic = JSONParser().parse(stream)
-                try:
-                    if user_data_dic["email"]:
-                        try:
-                            # catch the url front front end and also the paramter
-                            url_check = request.build_absolute_uri()
-                            if url_check ==  user_data_dic["url"]:
-                                if len(user_data_dic["recapcha"]) == 0:
-                                    return Response({"message": "Recapcha invalid"}, status=status.HTTP_400_BAD_REQUEST)
-                                # Here you capcha secret key from google capacha in .env file
-                                # secret = config('secret')
-                                secret = "6LdjEeQaAAAAAAFIGHyO4CzqEcsBrVKI0DeWFtwg"
-                                url = f"https://www.google.com/recaptcha/api/siteverify?secret={secret}&response={user_data_dic['recapcha']}"
-                                x = requests.post(url)
-                                response_dict = json.loads(x.text)
-                                # if response_dict["success"] == True:
-                                #     pass
-                                # else:
-                                #     return Response({"message": "Invalid capcha"}, status=status.HTTP_400_BAD_REQUEST)
-                            else:
-                                response = Response({"message": "Url required !!! "}, status=status.HTTP_200_OK)
-                                return response
-                        except:
-                            response = Response({"message": "Url required !!! "}, status=status.HTTP_200_OK)
-                            return response
-                except:
-                    response = Response({"message": "Email required !!! "}, status=status.HTTP_200_OK)
-                    return response
-                else:
-                    response = Response({"message": "Url required !!! "}, status=status.HTTP_200_OK)
-                    return response
-        except:
-            response = Response({"message": "All fields required !!! "}, status=status.HTTP_200_OK)
-            return response
-        try:
-            if request.COOKIES:
-                token = request.COOKIES.get('refresh')
-                splitted_token = token.split(".")
-                second_base64_string = splitted_token[1]
-                second_base64_string_bytes = second_base64_string.encode('ascii')
-                jwt_bytes = base64.b64decode(second_base64_string_bytes + b'=' * (-len(second_base64_string_bytes) % 4))
-                jwt_decoded = jwt_bytes.decode('ascii')
-                jwt_decoded = json.loads(jwt_decoded)
-                exp = jwt_decoded["exp"]
-                import time
-                time_expired_check = exp - time.time()
-                if time_expired_check <= 0:
-                    request.COOKIES.clear()
-                else:
-                    request.COOKIES.clear()
-            else:
-                pass
-                # response = Response({"message": "there is no cookie "}, status=status.HTTP_200_OK)
-                # return response
-        except:
-            response = Response({"message": "there is not cookie "}, status=status.HTTP_200_OK)
-            return response
         if request.COOKIES.get('refresh'):
             serializer = self.get_serializer(data={"refresh": request.COOKIES.get('refresh')})
         else:
