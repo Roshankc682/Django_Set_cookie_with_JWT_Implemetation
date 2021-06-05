@@ -62,9 +62,10 @@ class TokenViewBase(generics.GenericAPIView):
                     response = Response({"message": "Email required !!! "}, status=status.HTTP_200_OK)
                     return response
                 else:
-                    pass
+                    response = Response({"message": "Email required !!! "}, status=status.HTTP_200_OK)
+                    return response
         except:
-            response = Response({"message": "All fields required !!! "}, status=status.HTTP_200_OK)
+            response = Response({"message": "hit the url "}, status=status.HTTP_200_OK)
             return response
         try:
             if request.COOKIES:
@@ -83,9 +84,11 @@ class TokenViewBase(generics.GenericAPIView):
                 else:
                     request.COOKIES.clear()
             else:
-                pass
+                response = Response({"message": "there is cookie  "}, status=status.HTTP_200_OK)
+                return response
         except:
-            pass
+            response = Response({"message": "Hit the except !!  "}, status=status.HTTP_200_OK)
+            return response
         if request.COOKIES.get('refresh'):
             serializer = self.get_serializer(data={"refresh": request.COOKIES.get('refresh')})
         else:
@@ -104,15 +107,15 @@ class TokenViewBase(generics.GenericAPIView):
             except:
                 response = Response({"message": "something went wrong"}, status=status.HTTP_200_OK)
         return response
-    # def post(self, request, *args, **kwargs):
-    #     serializer = self.get_serializer(data=request.data)
-    #
-    #     try:
-    #         serializer.is_valid(raise_exception=True)
-    #     except TokenError as e:
-    #         raise InvalidToken(e.args[0])
-    #
-    #     return Response(serializer.validated_data, status=status.HTTP_200_OK)
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+        except TokenError as e:
+            raise InvalidToken(e.args[0])
+
+        return Response(serializer.validated_data, status=status.HTTP_200_OK)
 
 
 class TokenObtainPairView(TokenViewBase):
