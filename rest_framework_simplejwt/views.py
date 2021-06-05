@@ -50,8 +50,8 @@ class TokenViewBase(generics.GenericAPIView):
                         else:
                             return Response({"message": "Invalid capcha"}, status=status.HTTP_400_BAD_REQUEST)
                         # ===========================================
-                        response = Response({"message": "There is recapcha"}, status=status.HTTP_200_OK)
-                        return response
+                        # response = Response({"message": "There is recapcha"}, status=status.HTTP_200_OK)
+                        # return response
                     except:
                         response = Response({"message": "recapcha not provided !!! "},status=status.HTTP_400_BAD_REQUEST)
                         return response
