@@ -97,7 +97,7 @@ class TokenViewBase(generics.GenericAPIView):
                 response = Response(serializer.validated_data, status=status.HTTP_200_OK)
                 response.set_cookie('refresh', refresh, samesite="none", secure=True, httponly=True)
             except:
-                response = Response({"message": "something went wrong"}, status=status.HTTP_200_OK)
+                response = Response({"message": "111 something went wrong"}, status=status.HTTP_200_OK)
         return response
     # def post(self, request, *args, **kwargs):
     #     serializer = self.get_serializer(data=request.data)
