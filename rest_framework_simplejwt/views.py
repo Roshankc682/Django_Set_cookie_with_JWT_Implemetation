@@ -28,13 +28,18 @@ class TokenViewBase(generics.GenericAPIView):
 
     # =========================================================================
     def post(self, request, *args, **kwargs):
-        if request.COOKIES:
-            response = Response({"message": request.COOKIES.get('refresh')}, status=status.HTTP_200_OK)
+
+        try:
+            if request.COOKIES:
+                response = Response({"message": request.COOKIES.get('refresh')}, status=status.HTTP_200_OK)
+                return response
+            else:
+                # response = Response({"message": "pass to login"}, status=status.HTTP_200_OK)
+                # return respon
+                pass
+        except:
+            response = Response({"except": "pass to login"}, status=status.HTTP_200_OK)
             return response
-        else:
-            # response = Response({"message": "pass to login"}, status=status.HTTP_200_OK)
-            # return respon
-            pass
         if request.COOKIES.get('refresh'):
             serializer = self.get_serializer(data={"refresh": request.COOKIES.get('refresh')})
         else:
