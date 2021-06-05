@@ -84,8 +84,9 @@ class TokenViewBase(generics.GenericAPIView):
                 else:
                     request.COOKIES.clear()
             else:
-                response = Response({"message": "there is cookie "}, status=status.HTTP_200_OK)
-                return response
+                pass
+                # response = Response({"message": "there is no cookie "}, status=status.HTTP_200_OK)
+                # return response
         except:
             response = Response({"message": "there is not cookie "}, status=status.HTTP_200_OK)
             return response
