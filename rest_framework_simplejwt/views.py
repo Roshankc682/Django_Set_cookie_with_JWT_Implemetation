@@ -1,6 +1,9 @@
 import base64
 import json
 import io
+
+from django.http import HttpResponseRedirect
+
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
@@ -29,6 +32,7 @@ class TokenViewBase(generics.GenericAPIView):
 
     # =========================================================================
     def post(self, request, *args, **kwargs):
+
         try:
             if request.build_absolute_uri() == "http://api-v1-backend.herokuapp.com/api/access/refresh/" \
                     or \
@@ -52,7 +56,7 @@ class TokenViewBase(generics.GenericAPIView):
                                 url = f"https://www.google.com/recaptcha/api/siteverify?secret={secret}&response={user_data_dic['recapcha']}"
                                 x = requests.post(url)
                                 response_dict = json.loads(x.text)
-                                pass
+                                # pass
                                 # if response_dict["success"] == True:
                                 #    pass
                                 # else:
@@ -121,7 +125,7 @@ class TokenViewBase(generics.GenericAPIView):
                 response = Response(serializer.validated_data, status=status.HTTP_200_OK)
                 response.set_cookie('refresh', refresh, samesite="none", secure=True, httponly=True)
             except:
-                response = Response({"message": "111 something went wrong"}, status=status.HTTP_200_OK)
+                response = Response({"message": "Refresh token should be send from cookie"}, status=status.HTTP_200_OK)
         return response
     # def post(self, request, *args, **kwargs):
     #     serializer = self.get_serializer(data=request.data)

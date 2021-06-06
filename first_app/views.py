@@ -2,16 +2,16 @@ import base64
 import io
 import json
 import requests
-from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework_simplejwt.tokens import RefreshToken
+
 from rest_framework.generics import GenericAPIView
 from rest_framework.parsers import JSONParser
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from .serializers import UserSerializer, MyTokenObtainPairSerializer
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework_simplejwt.views import (TokenObtainPairView)
+from rest_framework_simplejwt.views import *
 from .models import *
 from distutils.command.config import config
 from decouple import *
@@ -87,15 +87,13 @@ def get_data_of_user(request):
 
 
 @csrf_exempt
+@api_view(['GET'])
 def logout(request):
-    if request.method == 'GET':
-        response = HttpResponseRedirect('')
-        response.delete_cookie('refresh')
-        return response
-    else:
-        content = {'message': 'Request not allowed'}
-        return Response(content)
-
+    token = RefreshToken(request.COOKIES.get('refresh'))
+    token.blacklist()
+    response = Response({"message": "You are logout"}, status=status.HTTP_200_OK)
+    response.delete_cookie('refresh')
+    return response
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -123,7 +121,7 @@ def user_new_access_and_refrsh_token_and(request):
             if jwt_decoded["user_id"] == request.user.id:
                 pass
             else:
-                return Response({"message": "Something went wrong in space"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"message": "user id doesn't match !!! "}, status=status.HTTP_400_BAD_REQUEST)
             user = Users.objects.get(id=request.user.id)
             refresh = Obtain_Refresh_And_Access.get_token(user)
             response = Response({"access": str(refresh.access_token)}, status=status.HTTP_200_OK)

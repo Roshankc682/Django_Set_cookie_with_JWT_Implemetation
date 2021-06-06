@@ -28,7 +28,7 @@ SECRET_KEY = "django-insecure-ze26jpexemnehccu)s3qdwhi9j*l-q*o_i9%41d0qkwh$@w2(8
 # SECURITY WARNING: keep the secret key used in production secret!
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "api-v1-backend.herokuapp.com"]
 
@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',
     'first_app'
 ]
 REST_FRAMEWORK = {
@@ -156,9 +157,8 @@ MEDIA_URL = '/image/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_CREDENTIALS = True;
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
     "http://localhost:8000",
-    "http://localhost",
+    "http://localhost:3000",
     "https://api-v1-backend.herokuapp.com"
 ]
 
@@ -167,8 +167,8 @@ from datetime import timedelta
 SIMPLE_JWT = {
     # 'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
     # 'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=3),
-    'REFRESH_TOKEN_LIFETIME': timedelta(minutes=3),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=6),
+    'REFRESH_TOKEN_LIFETIME': timedelta(minutes=6),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
     'UPDATE_LAST_LOGIN': False,
