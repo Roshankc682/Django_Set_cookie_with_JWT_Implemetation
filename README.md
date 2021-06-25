@@ -3,7 +3,7 @@
 
 *Database = override the authuser*
 
-DATABASE => ad you wish use what ever you like
+DATABASE => Your wish use what ever you like
 
 and don't forget to change the secret_key  and other key fron .env 
 
@@ -30,8 +30,6 @@ so,Send refresh token to get new token as usual :)
 
 
 
-#If confuse then see the pic 
-*********************************************************************
 >Install the requirement from requirements.txt
 
 >Don't forget to change key from .env file
